@@ -21,10 +21,11 @@
 
     <TextView
         android:id="@+id/productDescription"
-        android:layout_width="0dp"
-        android:layout_height="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
-        android:text="TextView"
+        android:textColor="@color/black"
+        android:text="Loading Details..."
         app:layout_constraintEnd_toEndOf="@+id/productImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productImage" />
@@ -37,6 +38,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Add to card"
+        android:background="@color/orange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
