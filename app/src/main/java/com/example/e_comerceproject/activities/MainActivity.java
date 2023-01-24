@@ -38,14 +38,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         initCategories();
         initProducts();
-        //initSlider();
-    }
+        initSlider();
 
-  /*  private void initSlider() {
-        binding.carousel.addData(new CarouselItem("https://cdn.pixabay.com/photo/2016/06/15/00/08/special-offer-1457915__340.png"));
-        binding.carousel.addData(new CarouselItem("https://st.depositphotos.com/1029663/1384/i/600/depositphotos_13840733-stock-photo-special-offer.jpg"));
-        binding.carousel.addData(new CarouselItem("https://www.shutterstock.com/image-vector/special-offer-banner-vector-format-260nw-586903514.jpg"));
-    }*/
+    }
+      private void initSlider() {
+         /* binding.carousel.addData(new CarouselItem("https://cdn.pixabay.com/photo/2016/06/15/00/08/special-offer-1457915__340.png"));
+          binding.carousel.addData(new CarouselItem("https://st.depositphotos.com/1029663/1384/i/600/depositphotos_13840733-stock-photo-special-offer.jpg"));
+          binding.carousel.addData(new CarouselItem("https://www.shutterstock.com/image-vector/special-offer-banner-vector-format-260nw-586903514.jpg"));*/
+          getRecentOffers();
+      }
+
+
+
+
+
+      //Categories
     void initCategories(){
         categories=new ArrayList<>();
         GridLayoutManager gridLayoutManager=new GridLayoutManager(this,4);
@@ -103,6 +110,13 @@ public class MainActivity extends AppCompatActivity {
        queue.add(request);
     }
 
+
+
+
+
+
+
+    //products
     void initProducts(){
 
         products=new ArrayList<>();
@@ -114,16 +128,15 @@ public class MainActivity extends AppCompatActivity {
         products.add(new Product("girlsShirt","https://babynestboutique.com/wp-content/uploads/2021/09/SBT-229.jpeg","two shrt avalible",12,12,2,1));
         products.add(new Product("girlsShirt","https://babynestboutique.com/wp-content/uploads/2021/09/SBT-229.jpeg","two shrt avalible",12,12,2,1));
         products.add(new Product("girlsShirt","https://babynestboutique.com/wp-content/uploads/2021/09/SBT-229.jpeg","two shrt avalible",12,12,2,1));
-        products.add(new Product("girlsShirt","https://babynestboutique.com/wp-content/uploads/2021/09/SBT-229.jpeg","two shrt avalible",12,12,2,1));
+        products.add(new Product("girlsShirt","https://babynes tboutique.com/wp-content/uploads/2021/09/SBT-229.jpeg","two shrt avalible",12,12,2,1));
         products.add(new Product("girlsShirt","https://babynestboutique.com/wp-content/uploads/2021/09/SBT-229.jpeg","two shrt avalible",12,12,2,1));*/
         productAdapter=new ProductAdapter(this,products);
         getRecentProducts();
         binding.productList.setAdapter(productAdapter);
-
     }
     void getRecentProducts(){
         RequestQueue queue=Volley.newRequestQueue(this);
-        String url=Constants.GET_PRODUCTS_URL+ "?count=12 ";
+        String url=Constants.GET_PRODUCTS_URL+ "?count=32 ";
         StringRequest request=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -156,5 +169,29 @@ public class MainActivity extends AppCompatActivity {
         });
         queue.add(request);
 
+    }
+    void getRecentOffers() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        StringRequest request = new StringRequest(Request.Method.GET, Constants.GET_OFFERS_URL, response -> {
+            try {
+                JSONObject object = new JSONObject(response);
+                if(object.getString("status").equals("success")) {
+                    JSONArray offerArray = object.getJSONArray("news_infos");
+                    for(int i =0; i < offerArray.length(); i++) {
+                        JSONObject childObj =  offerArray.getJSONObject(i);
+                        binding.carousel.addData(
+                                new CarouselItem(
+                                        Constants.NEWS_IMAGE_URL + childObj.getString("image"),
+                                        childObj.getString("title")
+                                )
+                        );
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, error -> {});
+        queue.add(request);
     }
 }
